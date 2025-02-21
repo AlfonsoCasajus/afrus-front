@@ -3,6 +3,8 @@ import { gsap } from 'gsap'
 import { useTransitions } from '../composables/useTransitions'
 import type { PropType } from 'vue'
 import { onMounted } from 'vue'
+import Button from 'primevue/button'
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-vue'
 
 interface Columns {
   field: string
@@ -25,9 +27,17 @@ defineProps({
     required: false,
     default: 0,
   },
+  currentPage: {
+    type: Number,
+    default: 1,
+  },
+  perPage: {
+    type: Number,
+    default: 10,
+  },
 })
 
-defineEmits(['delete', 'details'])
+defineEmits(['delete', 'details', 'update:currentPage'])
 
 // Transitions and animations
 onMounted(() => {
@@ -44,33 +54,55 @@ const { onBeforeEnter, onEnter, onLeave } = useTransitions()
 </script>
 
 <template>
-  <table>
-    <thead>
-      <tr>
-        <th v-for="col of columns" :key="col.field" :field="col.field" :header="col.header">
-          {{ col.header }}
-        </th>
-      </tr>
-    </thead>
-    <TransitionGroup
-      tag="tbody"
-      :css="false"
-      @before-enter="onBeforeEnter"
-      @enter="onEnter"
-      @leave="onLeave"
-    >
-      <tr v-for="(item, rowIndex) in items" :key="`item-${rowIndex}`" :data-index="rowIndex">
-        <td
-          v-for="(colTd, index) in columns"
-          :key="`colTd-${index}`"
-          :field="colTd.field"
-          :header="colTd.header"
-        >
-          {{ item[colTd.field] }}
-        </td>
-      </tr>
-    </TransitionGroup>
-  </table>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th v-for="col of columns" :key="col.field" :field="col.field" :header="col.header">
+            {{ col.header }}
+          </th>
+        </tr>
+      </thead>
+      <TransitionGroup
+        tag="tbody"
+        :css="false"
+        @before-enter="onBeforeEnter"
+        @enter="onEnter"
+        @leave="onLeave"
+      >
+        <tr v-for="(item, rowIndex) in items" :key="`item-${rowIndex}`" :data-index="rowIndex">
+          <td
+            v-for="(colTd, index) in columns"
+            :key="`colTd-${index}`"
+            :field="colTd.field"
+            :header="colTd.header"
+          >
+            {{ item[colTd.field] }}
+          </td>
+        </tr>
+      </TransitionGroup>
+    </table>
+
+    <div class="pagination" v-if="total > perPage">
+      <Button
+        size="small"
+        :disabled="currentPage === 1"
+        @click="$emit('update:currentPage', currentPage - 1)"
+      >
+        <IconChevronLeft />
+      </Button>
+
+      <span>Page {{ currentPage }} of {{ Math.ceil(total / perPage) }}</span>
+
+      <Button
+        size="small"
+        :disabled="currentPage >= Math.ceil(total / perPage)"
+        @click="$emit('update:currentPage', currentPage + 1)"
+      >
+        <IconChevronRight />
+      </Button>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -90,6 +122,10 @@ table {
     font-size: 14px;
     font-weight: 500;
     padding: 0.5rem 1rem;
+    text-overflow: ellipsis;
+    max-width: 350px;
+    overflow: hidden;
+    white-space: nowrap;
   }
 
   tr {
@@ -97,5 +133,32 @@ table {
     background-color: var(--sidebar-bg);
     text-wrap: nowrap;
   }
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background-color: var(--sidebar-bg);
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>

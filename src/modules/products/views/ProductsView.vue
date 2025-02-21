@@ -34,6 +34,8 @@ const searchProducts = () => {
   if (!filters.value.minStock) delete filters.value.minStock
   if (!filters.value.maxStock) delete filters.value.maxStock
 
+  filters.value.page = 1
+
   getProducts(filters.value)
 }
 
@@ -58,6 +60,11 @@ const columns = [
   { field: 'price', header: 'Precio' },
   { field: 'stock', header: 'Stock' },
 ]
+
+const updateCurrentPage = (page: number) => {
+  filters.value.page = page
+  getProducts({ ...filters.value })
+}
 </script>
 
 <template>
@@ -129,9 +136,9 @@ const columns = [
       <Button
         v-tooltip="'Buscar'"
         class="btn-search"
-        @click="searchProducts"
         severity="info"
         :disabled="!hasFilters"
+        @click="searchProducts"
       >
         <IconSearch :size="16" />
         Filtrar
@@ -146,6 +153,9 @@ const columns = [
         :items="productsList"
         :columns="columns"
         :total="totalProducts"
+        :currentPage="filters.page"
+        :perPage="filters.limit"
+        @update:currentPage="updateCurrentPage"
       />
 
       <ProgressSpinner v-else />

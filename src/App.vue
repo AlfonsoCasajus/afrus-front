@@ -26,6 +26,7 @@ import Toast from 'primevue/toast'
     margin: 0 auto;
     padding: 1rem;
     color: white;
+    overflow: hidden;
   }
 }
 </style>

@@ -1,40 +1,40 @@
-// import type { Product } from "~/types/product";
+import type { Product } from '../types/products'
 
 import { ref } from 'vue'
+import { fetchProducts } from '../services/products.service'
+import type { Filters } from '../types/products'
+import { useToast } from 'primevue/usetoast'
 
 export const useProducts = () => {
-  // const snackbar = useSnackbar();
-  // const products = ref<Product[]>([]);
+  const toast = useToast()
+
+  const productsList = ref<Product[]>([])
+  const totalProducts = ref(0)
+
   const isLoadingProducts = ref(false)
 
-  const fetchProducts = async () => {
+  const getProducts = async (filters: Filters) => {
     isLoadingProducts.value = true
     try {
-      // const productsResponse = await $fetch('https://fakestoreapi.com/products')
-      // if (!productsResponse) throw Error('Error al buscar los productos')
-      // const productsList = productsResponse as Product[];
-      // products.value = productsList;
+      const productsResponse = await fetchProducts(filters)
+      productsList.value = productsResponse.products
+      totalProducts.value = productsResponse.total
     } catch (error) {
+      toast.add({
+        severity: 'error',
+        summary: 'Ups algo fallo!',
+        detail: `Vuelve a intentarlo mas tarde`,
+        life: 3000,
+      })
       console.error('Error fetching products: ', error)
-      // snackbar.add({
-      //   type: 'error',
-      //   dismissible: true,
-      //   title: 'Ups algo fallo!',
-      //   text: `Vuelve a intentarlo mas tarde`
-      // })
     }
     isLoadingProducts.value = false
   }
 
-  // Eliminar un producto
-  const deleteProduct = async (productId: number) => {
-    // products.value = products.value.filter((product) => product.id !== productId);
-  }
-
   return {
-    fetchProducts,
-    deleteProduct,
     isLoadingProducts,
-    // products
+    getProducts,
+    productsList,
+    totalProducts,
   }
 }

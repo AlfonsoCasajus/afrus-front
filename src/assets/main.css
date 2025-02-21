@@ -14,6 +14,8 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   font-family: 'Inter', Sans-serif;
+  background-color: var(--primary-bg);
+  color: var(--text-primary);
 }
 
 img,
@@ -58,4 +60,14 @@ h6 {
 #root,
 #__next {
   isolation: isolate;
+}
+
+:root {
+  --primary-bg: #0d0d0d;
+  --sidebar-bg: #131e26;
+  --interactive: #1e88e5;
+  --text-primary: #ffffff;
+  --text-secondary: #b0bec5;
+  --border-color: #263238;
+  --hover-color: #1565c0;
 }

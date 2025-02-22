@@ -11,6 +11,7 @@ import { useBuyers } from '../composables/useBuyers'
 import ProgressSpinner from 'primevue/progressspinner'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
+import Tag from 'primevue/tag'
 
 // Icons
 import { IconSearch, IconRefresh } from '@tabler/icons-vue'
@@ -53,6 +54,12 @@ const columns = [
 const updateCurrentPage = (page: number) => {
   filters.value.page = page
   getBuyers({ ...filters.value })
+}
+
+const getDocumentTypeColor = (documentType: 'DNI' | 'Passport' | 'Driver License') => {
+  if (documentType === 'DNI') return 'primary'
+  if (documentType === 'Passport') return 'secondary'
+  if (documentType === 'Driver License') return 'info'
 }
 </script>
 
@@ -118,7 +125,20 @@ const updateCurrentPage = (page: number) => {
         :currentPage="filters.page"
         :perPage="filters.limit"
         @update:currentPage="updateCurrentPage"
-      />
+      >
+        <template #idType="{ item }">
+          <Tag :value="item.idType" :severity="getDocumentTypeColor(item.idType)" />
+        </template>
+        <template #createdAt="{ item }">
+          {{
+            new Intl.DateTimeFormat('es-AR', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+            }).format(new Date(item.createdAt))
+          }}
+        </template>
+      </AfrusTable>
 
       <ProgressSpinner v-else />
     </div>

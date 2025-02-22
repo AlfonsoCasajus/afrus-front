@@ -12,6 +12,7 @@ import ProgressSpinner from 'primevue/progressspinner'
 import InputNumber from 'primevue/inputnumber'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
+import Tag from 'primevue/tag'
 
 // Icons
 import { IconSearch, IconRefresh } from '@tabler/icons-vue'
@@ -157,7 +158,17 @@ const updateCurrentPage = (page: number) => {
         :currentPage="filters.page"
         :perPage="filters.limit"
         @update:currentPage="updateCurrentPage"
-      />
+      >
+        <template #price="{ item }">
+          <span>${{ item.price }}</span>
+        </template>
+        <template #stock="{ item }">
+          <Tag
+            :value="item.stock"
+            :severity="item.stock >= 75 ? 'success' : item.stock >= 25 ? 'warn' : 'danger'"
+          />
+        </template>
+      </AfrusTable>
 
       <ProgressSpinner v-else />
     </div>

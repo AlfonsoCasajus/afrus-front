@@ -71,7 +71,9 @@ const { onBeforeEnter, onEnter, onLeave } = useTransitions()
             :field="colTd.field"
             :header="colTd.header"
           >
-            {{ item[colTd.field] }}
+            <slot :name="colTd.field" :item="item" :field="colTd.field">
+              {{ item[colTd.field] }}
+            </slot>
           </td>
         </tr>
       </TransitionGroup>

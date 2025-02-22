@@ -130,6 +130,7 @@ table {
     border-radius: 1rem;
     background-color: #011c2f;
     text-wrap: nowrap;
+    transition: 0.2s;
   }
 
   tbody tr:hover {

@@ -131,6 +131,11 @@ table {
     background-color: #011c2f;
     text-wrap: nowrap;
   }
+
+  tbody tr:hover {
+    background-color: #002e4e;
+    transition: 0.2s;
+  }
 }
 
 .table-container {

@@ -57,6 +57,10 @@ h6 {
   font-family: 'Rubik', sans-serif;
 }
 
+a {
+  text-decoration: none;
+}
+
 #root,
 #__next {
   isolation: isolate;

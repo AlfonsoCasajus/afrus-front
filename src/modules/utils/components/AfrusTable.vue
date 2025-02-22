@@ -63,13 +63,7 @@ const { onBeforeEnter, onEnter, onLeave } = useTransitions()
           </th>
         </tr>
       </thead>
-      <TransitionGroup
-        tag="tbody"
-        :css="false"
-        @before-enter="onBeforeEnter"
-        @enter="onEnter"
-        @leave="onLeave"
-      >
+      <TransitionGroup tag="tbody" @before-enter="onBeforeEnter" @enter="onEnter" @leave="onLeave">
         <tr v-for="(item, rowIndex) in items" :key="`item-${rowIndex}`" :data-index="rowIndex">
           <td
             v-for="(colTd, index) in columns"
@@ -85,18 +79,22 @@ const { onBeforeEnter, onEnter, onLeave } = useTransitions()
 
     <div class="pagination" v-if="total > perPage">
       <Button
+        rounded
         size="small"
         :disabled="currentPage === 1"
+        severity="info"
         @click="$emit('update:currentPage', currentPage - 1)"
       >
         <IconChevronLeft />
       </Button>
 
-      <span>Page {{ currentPage }} of {{ Math.ceil(total / perPage) }}</span>
+      <span>Página {{ currentPage }} of {{ Math.ceil(total / perPage) }}</span>
 
       <Button
         size="small"
+        rounded
         :disabled="currentPage >= Math.ceil(total / perPage)"
+        severity="info"
         @click="$emit('update:currentPage', currentPage + 1)"
       >
         <IconChevronRight />
@@ -128,9 +126,9 @@ table {
     white-space: nowrap;
   }
 
-  tr {
+  tbody tr {
     border-radius: 1rem;
-    background-color: var(--sidebar-bg);
+    background-color: #011c2f;
     text-wrap: nowrap;
   }
 }
@@ -146,19 +144,5 @@ table {
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  margin-top: 1rem;
-}
-
-.pagination button {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
-  background-color: var(--sidebar-bg);
-  cursor: pointer;
-}
-
-.pagination button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 </style>

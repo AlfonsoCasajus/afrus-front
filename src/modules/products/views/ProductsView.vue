@@ -68,7 +68,7 @@ const updateCurrentPage = (page: number) => {
 </script>
 
 <template>
-  <section>
+  <div class="products-view">
     <div class="filters">
       <div class="filter-header">
         <h3>Filtros</h3>
@@ -145,8 +145,10 @@ const updateCurrentPage = (page: number) => {
       </Button>
     </div>
     <div class="products-container">
-      <h1>PRODUCTOS</h1>
-      <p>Total de productos: {{ totalProducts }}</p>
+      <div class="products-header">
+        <h1>PRODUCTOS</h1>
+        <p>Total: {{ totalProducts }}</p>
+      </div>
 
       <AfrusTable
         v-if="!isLoadingProducts"
@@ -160,21 +162,18 @@ const updateCurrentPage = (page: number) => {
 
       <ProgressSpinner v-else />
     </div>
-  </section>
+  </div>
 </template>
 
 <style scoped>
-section {
+.products-view {
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
 
   .filters {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 1rem;
-    border-radius: 4px;
-    background-color: var(--sidebar-bg);
 
     .filter-header {
       display: flex;
@@ -194,7 +193,12 @@ section {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 1rem;
+
+    .products-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 }
 </style>

@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import Sidebar from './modules/navigation/components/SideBar.vue'
+import NavBar from './modules/navigation/components/NavBar.vue'
 import Toast from 'primevue/toast'
 </script>
 
 <template>
   <div class="wrapper">
     <Toast />
-    <Sidebar />
-    <div class="view">
+    <NavBar />
+    <section class="view">
       <RouterView />
-    </div>
+    </section>
   </div>
 </template>
 
@@ -18,13 +18,13 @@ import Toast from 'primevue/toast'
 .wrapper {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   background-color: var(--primary-bg);
+  max-width: 1200px;
+  margin: auto;
 
   .view {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
+    padding: 1rem 0;
     color: white;
     overflow: hidden;
   }

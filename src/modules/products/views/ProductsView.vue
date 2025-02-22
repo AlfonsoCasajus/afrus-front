@@ -116,20 +116,19 @@ const updateCurrentPage = (page: number) => {
       </span>
       <span>
         <label for="stock">Stock</label>
-
-        <InputNumber
-          v-model="filters.maxStock"
-          id="stock"
-          size="small"
-          inputId="integeronly"
-          placeholder="Maximo"
-        />
         <InputNumber
           v-model="filters.minStock"
           id="stock"
           size="small"
           inputId="integeronly"
           placeholder="Minimo"
+        />
+        <InputNumber
+          v-model="filters.maxStock"
+          id="stock"
+          size="small"
+          inputId="integeronly"
+          placeholder="Maximo"
         />
       </span>
 

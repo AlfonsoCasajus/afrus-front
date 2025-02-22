@@ -108,7 +108,6 @@ const { onBeforeEnter, onEnter, onLeave } = useTransitions()
 <style scoped>
 table {
   width: 100%;
-  display: table-row-group;
   overflow: hidden;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   border-collapse: separate;
@@ -117,13 +116,12 @@ table {
 
   th,
   td {
-    width: 100%;
+    max-width: 350px;
     text-align: left;
     font-size: 14px;
     font-weight: 500;
     padding: 0.5rem 1rem;
     text-overflow: ellipsis;
-    max-width: 350px;
     overflow: hidden;
     white-space: nowrap;
   }

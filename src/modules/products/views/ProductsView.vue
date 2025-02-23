@@ -207,8 +207,22 @@ const updateCurrentPage = (page: number) => {
     .products-header {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       justify-content: space-between;
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .products-view {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .filters {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
 }
 </style>

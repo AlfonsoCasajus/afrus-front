@@ -106,7 +106,16 @@ const { onBeforeEnter, onEnter, onLeave } = useTransitions()
 </template>
 
 <style scoped>
+.table-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-x: auto;
+}
+
 table {
+  min-width: 100%;
   width: 100%;
   overflow: hidden;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
@@ -138,12 +147,6 @@ table {
     background-color: #002e4e;
     transition: 0.2s;
   }
-}
-
-.table-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
 }
 
 .pagination {

@@ -176,7 +176,13 @@ const transactionsColumns = [
       <ProgressSpinner v-else />
     </div>
 
-    <Dialog v-model:visible="visible" modal header="Edit Profile">
+    <Dialog
+      v-model:visible="visible"
+      modal
+      header="Transacciones del comprador"
+      :draggable="false"
+      :style="{ maxWidth: '75vw' }"
+    >
       <template #header>
         <span>Transacciones del comprador</span>
       </template>
@@ -244,8 +250,22 @@ const transactionsColumns = [
     .buyers-header {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       justify-content: space-between;
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .buyers-view {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .filters {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
 }
 </style>

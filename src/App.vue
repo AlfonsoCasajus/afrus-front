@@ -24,7 +24,7 @@ import Toast from 'primevue/toast'
   margin: auto;
 
   .view {
-    padding: 1rem 0;
+    padding: 1rem;
     color: white;
     overflow: hidden;
   }

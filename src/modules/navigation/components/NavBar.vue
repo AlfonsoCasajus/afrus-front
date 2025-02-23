@@ -42,6 +42,7 @@ nav {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 1rem;
     list-style: none;
 

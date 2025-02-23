@@ -6,7 +6,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: import('../modules/products/views/ProductsView.vue'),
+      redirect: '/compradores',
     },
     {
       path: '/productos',
@@ -15,8 +15,12 @@ const router = createRouter({
     },
     {
       path: '/compradores',
-      name: 'about',
+      name: 'buyers',
       component: () => import('../modules/buyers/views/BuyersView.vue'),
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/',
     },
   ],
 })

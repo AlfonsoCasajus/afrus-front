@@ -11,21 +11,21 @@ import { useBuyers } from '../composables/useBuyers'
 import ProgressSpinner from 'primevue/progressspinner'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
+import Dialog from 'primevue/dialog'
 import Tag from 'primevue/tag'
 
 // Icons
-import { IconSearch, IconRefresh } from '@tabler/icons-vue'
+import { IconSearch, IconRefresh, IconEye } from '@tabler/icons-vue'
 
 // Types
-import type { Filters } from '../types/buyers'
+import type { Filters, Buyer } from '../types/buyers'
 
 const { getBuyers, isLoadingBuyers, buyersList, totalBuyers } = useBuyers()
 
+// Fetch Buyers
 onMounted(() => {
   getBuyers({})
 })
-
-const filters = ref<Filters>({})
 
 const searchBuyers = () => {
   if (!filters.value.firstName) delete filters.value.firstName
@@ -34,6 +34,9 @@ const searchBuyers = () => {
 
   getBuyers(filters.value)
 }
+
+// Filters
+const filters = ref<Filters>({})
 
 const resetFilters = () => {
   filters.value = {}
@@ -44,23 +47,41 @@ const hasFilters = computed(() => {
   return filters.value.firstName || filters.value.lastName
 })
 
-const columns = [
-  { field: 'firstName', header: 'Nombre' },
-  { field: 'lastName', header: 'Apellido' },
-  { field: 'idType', header: 'Tipo de documento' },
-  { field: 'createdAt', header: 'Fecha de creación' },
-]
-
 const updateCurrentPage = (page: number) => {
   filters.value.page = page
   getBuyers({ ...filters.value })
 }
+
+// Table data
+const columns = [
+  { field: 'firstName', header: 'Nombre' },
+  { field: 'lastName', header: 'Apellido' },
+  { field: 'idType', header: 'Tipo de documento' },
+  { field: 'createdAt', header: 'Fecha' },
+  { field: 'actions', header: 'Acciones' },
+]
 
 const getDocumentTypeColor = (documentType: 'DNI' | 'Passport' | 'Driver License') => {
   if (documentType === 'DNI') return 'primary'
   if (documentType === 'Passport') return 'secondary'
   if (documentType === 'Driver License') return 'info'
 }
+
+// Buyer Dialog
+const visible = ref(false)
+const selectedBuyer = ref<Buyer | null>(null)
+
+const selectBuyer = (buyer: Buyer) => {
+  selectedBuyer.value = buyer
+  visible.value = true
+}
+
+const transactionsColumns = [
+  { field: 'product', header: 'Producto' },
+  { field: 'tax', header: 'Impuesto' },
+  { field: 'paidPrice', header: 'Precio pagado' },
+  { field: 'date', header: 'Fecha' },
+]
 </script>
 
 <template>
@@ -87,6 +108,7 @@ const getDocumentTypeColor = (documentType: 'DNI' | 'Passport' | 'Driver License
           type="text"
           placeholder="Buscar por nombre"
           clearable
+          @keyup.enter="searchBuyers"
         />
       </span>
       <span>
@@ -98,6 +120,7 @@ const getDocumentTypeColor = (documentType: 'DNI' | 'Passport' | 'Driver License
           type="text"
           placeholder="Buscar por apellido"
           clearable
+          v-on:keyup.enter="searchBuyers"
         />
       </span>
       <Button
@@ -138,10 +161,54 @@ const getDocumentTypeColor = (documentType: 'DNI' | 'Passport' | 'Driver License
             }).format(new Date(item.createdAt))
           }}
         </template>
+        <template #actions="{ item }">
+          <Button
+            v-tooltip.top="'Ver Transacciones'"
+            rounded
+            severity="secondary"
+            @click="selectBuyer(item)"
+          >
+            <IconEye />
+          </Button>
+        </template>
       </AfrusTable>
 
       <ProgressSpinner v-else />
     </div>
+
+    <Dialog v-model:visible="visible" modal header="Edit Profile">
+      <template #header>
+        <span>Transacciones del comprador</span>
+      </template>
+
+      <AfrusTable
+        :items="selectedBuyer?.transactions"
+        :columns="transactionsColumns"
+        :total="selectedBuyer?.transactions.length"
+        :currentPage="1"
+        :perPage="10"
+        @update:currentPage="updateCurrentPage"
+      >
+        <template #tax="{ item }">
+          <span>${{ Math.round(item.tax * 100) / 100 }}</span>
+        </template>
+        <template #paidPrice="{ item }">
+          <span>${{ Math.round(item.paidPrice * 100) / 100 }}</span>
+        </template>
+        <template #product="{ item }">
+          <span>{{ item.product.name }}</span>
+        </template>
+        <template #date="{ item }">
+          {{
+            new Intl.DateTimeFormat('es-AR', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+            }).format(new Date(item.date))
+          }}
+        </template>
+      </AfrusTable>
+    </Dialog>
   </div>
 </template>
 

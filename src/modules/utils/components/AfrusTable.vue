@@ -113,6 +113,7 @@ table {
   border-collapse: separate;
   border-spacing: 0 10px;
   color: var(--text-secondary);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 
   th,
   td {

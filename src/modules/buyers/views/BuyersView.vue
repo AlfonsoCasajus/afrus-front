@@ -57,6 +57,7 @@ const columns = [
   { field: 'firstName', header: 'Nombre' },
   { field: 'lastName', header: 'Apellido' },
   { field: 'idType', header: 'Tipo de documento' },
+  { field: 'transactions', header: 'Transacciones' },
   { field: 'createdAt', header: 'Fecha' },
   { field: 'actions', header: 'Acciones' },
 ]
@@ -77,10 +78,10 @@ const selectBuyer = (buyer: Buyer) => {
 }
 
 const transactionsColumns = [
+  { field: 'date', header: 'Fecha' },
   { field: 'product', header: 'Producto' },
   { field: 'tax', header: 'Impuesto' },
   { field: 'paidPrice', header: 'Precio pagado' },
-  { field: 'date', header: 'Fecha' },
 ]
 </script>
 
@@ -139,7 +140,6 @@ const transactionsColumns = [
         <h1>COMPRADORES</h1>
         <p>Total: {{ totalBuyers }}</p>
       </div>
-
       <AfrusTable
         v-if="!isLoadingBuyers"
         :items="buyersList"
@@ -161,11 +161,15 @@ const transactionsColumns = [
             }).format(new Date(item.createdAt))
           }}
         </template>
+        <template #transactions="{ item }">
+          {{ item.transactions.length ? item.transactions.length : 'Sin transacciones' }}
+        </template>
         <template #actions="{ item }">
           <Button
             v-tooltip.top="'Ver Transacciones'"
             rounded
             severity="secondary"
+            :disabled="!item.transactions.length"
             @click="selectBuyer(item)"
           >
             <IconEye />

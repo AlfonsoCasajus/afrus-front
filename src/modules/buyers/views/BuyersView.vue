@@ -167,7 +167,7 @@ const transactionsColumns = [
           </template>
           <template #actions="{ item }">
             <Button
-              v-tooltip.top="'Ver Transacciones'"
+              v-tooltip.top="item.transactions.length ? 'Ver Transacciones' : 'Sin transacciones'"
               rounded
               severity="secondary"
               :disabled="!item.transactions.length"

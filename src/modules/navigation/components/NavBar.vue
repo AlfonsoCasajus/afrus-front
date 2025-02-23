@@ -2,6 +2,10 @@
 import { ref } from 'vue'
 import Button from 'primevue/button'
 import { IconShoppingCart, IconUsers } from '@tabler/icons-vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 const navItems = ref([
   {
     label: 'Productos',
@@ -20,7 +24,13 @@ const navItems = ref([
   <nav>
     <ul>
       <li v-for="item in navItems" :key="item.path">
-        <Button as="router-link" :to="item.path" size="small" variant="text" severity="primary">
+        <Button
+          as="router-link"
+          :to="item.path"
+          size="small"
+          :variant="router.currentRoute.value.path === item.path ? undefined : 'text'"
+          severity="primary"
+        >
           <component :is="item.icon" />
           {{ item.label }}
         </Button>

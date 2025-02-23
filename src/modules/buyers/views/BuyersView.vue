@@ -140,42 +140,48 @@ const transactionsColumns = [
         <h1>COMPRADORES</h1>
         <p>Total: {{ totalBuyers }}</p>
       </div>
-      <AfrusTable
-        v-if="!isLoadingBuyers"
-        :items="buyersList"
-        :columns="columns"
-        :total="totalBuyers"
-        :currentPage="filters.page"
-        :perPage="filters.limit"
-        @update:currentPage="updateCurrentPage"
-      >
-        <template #idType="{ item }">
-          <Tag :value="item.idType" :severity="getDocumentTypeColor(item.idType)" />
-        </template>
-        <template #createdAt="{ item }">
-          {{
-            new Intl.DateTimeFormat('es-AR', {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-            }).format(new Date(item.createdAt))
-          }}
-        </template>
-        <template #transactions="{ item }">
-          {{ item.transactions.length ? item.transactions.length : 'Sin transacciones' }}
-        </template>
-        <template #actions="{ item }">
-          <Button
-            v-tooltip.top="'Ver Transacciones'"
-            rounded
-            severity="secondary"
-            :disabled="!item.transactions.length"
-            @click="selectBuyer(item)"
-          >
-            <IconEye />
-          </Button>
-        </template>
-      </AfrusTable>
+      <div v-if="!isLoadingBuyers">
+        <AfrusTable
+          v-if="buyersList.length"
+          :items="buyersList"
+          :columns="columns"
+          :total="totalBuyers"
+          :currentPage="filters.page"
+          :perPage="filters.limit"
+          @update:currentPage="updateCurrentPage"
+        >
+          <template #idType="{ item }">
+            <Tag :value="item.idType" :severity="getDocumentTypeColor(item.idType)" />
+          </template>
+          <template #createdAt="{ item }">
+            {{
+              new Intl.DateTimeFormat('es-AR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+              }).format(new Date(item.createdAt))
+            }}
+          </template>
+          <template #transactions="{ item }">
+            {{ item.transactions.length ? item.transactions.length : 'Sin transacciones' }}
+          </template>
+          <template #actions="{ item }">
+            <Button
+              v-tooltip.top="'Ver Transacciones'"
+              rounded
+              severity="secondary"
+              :disabled="!item.transactions.length"
+              @click="selectBuyer(item)"
+            >
+              <IconEye />
+            </Button>
+          </template>
+        </AfrusTable>
+        <div v-else class="no-results">
+          <p>No hay compradores que cumplan con los filtros</p>
+          <Button severity="info" @click="resetFilters">Reestablecer filtros</Button>
+        </div>
+      </div>
 
       <ProgressSpinner v-else />
     </div>
@@ -257,6 +263,17 @@ const transactionsColumns = [
       flex-wrap: wrap;
       justify-content: space-between;
     }
+  }
+
+  .no-results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
   }
 }
 

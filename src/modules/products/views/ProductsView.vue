@@ -150,25 +150,31 @@ const updateCurrentPage = (page: number) => {
         <p>Total: {{ totalProducts }}</p>
       </div>
 
-      <AfrusTable
-        v-if="!isLoadingProducts"
-        :items="productsList"
-        :columns="columns"
-        :total="totalProducts"
-        :currentPage="filters.page"
-        :perPage="filters.limit"
-        @update:currentPage="updateCurrentPage"
-      >
-        <template #price="{ item }">
-          <span>${{ item.price }}</span>
-        </template>
-        <template #stock="{ item }">
-          <Tag
-            :value="item.stock"
-            :severity="item.stock >= 75 ? 'success' : item.stock >= 25 ? 'warn' : 'danger'"
-          />
-        </template>
-      </AfrusTable>
+      <div v-if="!isLoadingProducts">
+        <AfrusTable
+          v-if="productsList.length"
+          :items="productsList"
+          :columns="columns"
+          :total="totalProducts"
+          :currentPage="filters.page"
+          :perPage="filters.limit"
+          @update:currentPage="updateCurrentPage"
+        >
+          <template #price="{ item }">
+            <span>${{ item.price }}</span>
+          </template>
+          <template #stock="{ item }">
+            <Tag
+              :value="item.stock"
+              :severity="item.stock >= 75 ? 'success' : item.stock >= 25 ? 'warn' : 'danger'"
+            />
+          </template>
+        </AfrusTable>
+        <div v-else class="no-results">
+          <p>No hay productos que cumplan con los filtros</p>
+          <Button severity="info" @click="resetFilters">Reestablecer filtros</Button>
+        </div>
+      </div>
 
       <ProgressSpinner v-else />
     </div>
@@ -210,6 +216,17 @@ const updateCurrentPage = (page: number) => {
       flex-wrap: wrap;
       justify-content: space-between;
     }
+  }
+
+  .no-results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
   }
 }
 
